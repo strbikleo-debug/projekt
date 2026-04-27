@@ -1,6 +1,7 @@
 <?php
-include_once "databaza.sql";
-?><!DOCTYPE html>
+  include_once "databaza.php";
+?>
+<!DOCTYPE html>
 <html lang="sk">
 
 <head>
@@ -11,7 +12,7 @@ include_once "databaza.sql";
 
 <body class="bg-light">
   <?php
-  $conn = mysqli_connect("localhost", "root", "root", "aut");
+  $conn = mysqli_connect("localhost", "root", "root", "todo_app");
 
   if(!$conn){
     echo "Chyba pripojenia" . mysqli_connect_error();
