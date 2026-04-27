@@ -6,7 +6,8 @@ DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(100) NOT NULL
+    username VARCHAR(100) NOT NULL,
+    password VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE tasks (
@@ -19,9 +20,9 @@ CREATE TABLE tasks (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-INSERT INTO users (username) VALUES
-('Admin'),
-('TestUser');
+INSERT INTO users (username, password) VALUES
+('Admin', 'admin123'),
+('TestUser', 'test456');
 
 INSERT INTO tasks (user_id, title, description, status) VALUES
 (1, 'Dokoncit databazu', 'Vytvorit tabulky a testovacie data', 'pending'),

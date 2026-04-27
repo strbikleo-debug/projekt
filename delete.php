@@ -6,10 +6,6 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="" method="POST">
-        <button type="submit" name="delete">Delete</button>
-    </form>
-
     <?php 
     if(isset($_POST['delete'])) {
         $sql = "DELETE FROM tasks";

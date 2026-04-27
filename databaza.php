@@ -1,14 +1,12 @@
 <?php
 $host = "localhost";
 $user = "root";
-$pass = "";
-$dbname = "todo_app";
+$pass = "root";
+$db_name = "todo_app";
 
-$conn = new mysqli($host, $user, $pass, $dbname);
+$conn = mysqli_connect($host, $user, $pass, $db_name);
 
-if ($conn->connect_error) {
-    die("Chyba pripojenia: " . $conn->connect_error);
+if (!$conn) {
+    die("Spojenie zlyhalo: " . mysqli_connect_error());
 }
-
-$conn->set_charset("utf8mb4");
 ?>

@@ -6,11 +6,6 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="" method="POST">
-        <input type="text" name="title">
-        <input type="text" name="text">
-        <button type="submit" name="add">Add</button>
-    </form>
     <?php
     if(isset($_POST['add'])) {
         $text = $_POST['text'];
