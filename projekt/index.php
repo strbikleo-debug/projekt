@@ -206,7 +206,7 @@ if (isset($_POST["login"])) {
             <button type="submit" name="login" class="btn">Prihlásiť sa →</button>
         </form>
 
-        <p class="hint">Testovacie účty: <span>Admin / admin123</span> alebo <span>TestUser / test456</span></p>
+        
     </div>
 </body>
 </html>
