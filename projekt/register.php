@@ -1,9 +1,7 @@
 <?php
-
-
 session_start();
 
-
+// Ak je uz prihlaseny, presmeruj na tasky
 if (isset($_SESSION["user_id"])) {
     header("Location: tasks.php");
     exit();
@@ -11,33 +9,38 @@ if (isset($_SESSION["user_id"])) {
 
 include "db.php";
 
-$chyba = "";
+$chyba  = "";
+$uspech = false;
 
-
-if (isset($_POST["login"])) {
-    $username = $_POST["username"];
+if (isset($_POST["register"])) {
+    $username = trim($_POST["username"]);
     $password = $_POST["password"];
+    $confirm  = $_POST["confirm"];
 
-    
-    $username = mysqli_real_escape_string($conn, $username);
+    // Validacia
+    if (strlen($username) < 3) {
+        $chyba = "Meno musí mať aspoň 3 znaky!";
 
-    $sql    = "SELECT * FROM users WHERE username = '$username'";
-    $result = mysqli_query($conn, $sql);
+    } elseif (strlen($password) < 4) {
+        $chyba = "Heslo musí mať aspoň 4 znaky!";
 
-    if (mysqli_num_rows($result) == 1) {
-        $user = mysqli_fetch_assoc($result);
+    } elseif ($password !== $confirm) {
+        $chyba = "Heslá sa nezhodujú!";
 
-        
-        if ($password === $user["password"]) {
-            $_SESSION["user_id"]  = $user["id"];
-            $_SESSION["username"] = $user["username"];
-            header("Location: tasks.php");
-            exit();
-        } else {
-            $chyba = "Zlé heslo!";
-        }
     } else {
-        $chyba = "Používateľ neexistuje!";
+        // Skontroluj ci uz existuje
+        $u   = mysqli_real_escape_string($conn, $username);
+        $res = mysqli_query($conn, "SELECT id FROM users WHERE username = '$u'");
+
+        if (mysqli_num_rows($res) > 0) {
+            $chyba = "Toto meno je už obsadené!";
+        } else {
+            // Uloz do DB
+            $p   = mysqli_real_escape_string($conn, $password);
+            $sql = "INSERT INTO users (username, password) VALUES ('$u', '$p')";
+            mysqli_query($conn, $sql);
+            $uspech = true;
+        }
     }
 }
 ?>
@@ -46,7 +49,7 @@ if (isset($_POST["login"])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prihlásenie – To-Do App</title>
+    <title>Registrácia – DoIt</title>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -72,7 +75,6 @@ if (isset($_POST["login"])) {
             padding: 20px;
         }
 
-        /* Dekorativne kruhy na pozadi */
         body::before, body::after {
             content: "";
             position: fixed;
@@ -144,9 +146,7 @@ if (isset($_POST["login"])) {
             transition: border-color 0.2s;
             margin-bottom: 20px;
         }
-        input:focus {
-            border-color: var(--accent);
-        }
+        input:focus { border-color: var(--accent); }
 
         .btn {
             width: 100%;
@@ -175,38 +175,76 @@ if (isset($_POST["login"])) {
             margin-bottom: 20px;
         }
 
-        .hint {
+        .uspech {
+            background: rgba(200, 240, 74, 0.08);
+            border: 1px solid rgba(200, 240, 74, 0.3);
+            color: var(--accent);
+            padding: 14px 16px;
+            border-radius: 8px;
+            font-size: 0.92rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .uspech a {
+            color: var(--accent);
+            font-weight: 700;
+            text-decoration: underline;
+        }
+
+        .link {
             margin-top: 24px;
             text-align: center;
             color: var(--muted);
             font-size: 0.85rem;
         }
-        .hint span {
+        .link a {
             color: var(--accent);
             font-weight: 600;
+            text-decoration: none;
         }
+        .link a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
     <div class="card">
         <div class="logo">✓ DoIt</div>
-        <p class="subtitle">Prihlás sa a spravuj svoje úlohy</p>
+        <p class="subtitle">Vytvor si nový účet</p>
 
-        <?php if ($chyba): ?>
-            <div class="chyba"><?= $chyba ?></div>
+        <?php if ($uspech): ?>
+            <div class="uspech">
+                ✅ Účet bol vytvorený!<br><br>
+                <a href="index.php">Prihlás sa →</a>
+            </div>
+
+        <?php else: ?>
+
+            <?php if ($chyba): ?>
+                <div class="chyba"><?= $chyba ?></div>
+            <?php endif; ?>
+
+            <form method="POST">
+                <label for="username">Používateľské meno</label>
+                <input type="text" id="username" name="username"
+                       placeholder="min. 3 znaky"
+                       value="<?= htmlspecialchars($_POST["username"] ?? "") ?>"
+                       required>
+
+                <label for="password">Heslo</label>
+                <input type="password" id="password" name="password"
+                       placeholder="min. 4 znaky"
+                       required>
+
+                <label for="confirm">Zopakuj heslo</label>
+                <input type="password" id="confirm" name="confirm"
+                       placeholder="rovnaké heslo"
+                       required>
+
+                <button type="submit" name="register" class="btn">Registrovať sa →</button>
+            </form>
+
+            <p class="link">Už máš účet? <a href="index.php">Prihlás sa</a></p>
+
         <?php endif; ?>
-
-        <form method="POST">
-            <label for="username">Používateľské meno</label>
-            <input type="text" id="username" name="username" placeholder="napr. Admin" required>
-
-            <label for="password">Heslo</label>
-            <input type="password" id="password" name="password" placeholder="••••••••" required>
-
-            <button type="submit" name="login" class="btn">Prihlásiť sa →</button>
-        </form>
-
-        <p class="hint">Nemáš účet? <a href="register.php">Registruj sa</a></p>
     </div>
 </body>
 </html>
