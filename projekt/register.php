@@ -212,7 +212,7 @@ if (isset($_POST["register"])) {
 
         <?php if ($uspech): ?>
             <div class="uspech">
-                ✅ Účet bol vytvorený!<br><br>
+                 Účet bol vytvorený!<br><br>
                 <a href="index.php">Prihlás sa →</a>
             </div>
 

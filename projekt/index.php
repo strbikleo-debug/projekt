@@ -72,7 +72,7 @@ if (isset($_POST["login"])) {
             padding: 20px;
         }
 
-        /* Dekorativne kruhy na pozadi */
+        
         body::before, body::after {
             content: "";
             position: fixed;
@@ -189,7 +189,7 @@ if (isset($_POST["login"])) {
 </head>
 <body>
     <div class="card">
-        <div class="logo">✓ DoIt</div>
+        <div class="logo"> DoIt</div>
         <p class="subtitle">Prihlás sa a spravuj svoje úlohy</p>
 
         <?php if ($chyba): ?>

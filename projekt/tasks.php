@@ -368,7 +368,7 @@ $done    = array_filter($tasky, fn($t) => $t["status"] === "done");
 
 
 <div class="navbar">
-    <div class="logo">✓ DoIt</div>
+    <div class="logo"> DoIt</div>
     <div class="user-info">
         Prihlásený ako <strong><?= htmlspecialchars($username) ?></strong>
         <form method="POST" action="logout.php" style="display:inline;">
@@ -380,7 +380,7 @@ $done    = array_filter($tasky, fn($t) => $t["status"] === "done");
 
 <div class="container">
 
-    <div class="heading">Dobré ráno, <?= htmlspecialchars($username) ?> 👋</div>
+    <div class="heading">Dobré ráno, <?= htmlspecialchars($username) ?> </div>
     <p class="subheading">
         Máš <span><?= count($pending) ?></span> nedokončených úloh
         a <span><?= count($done) ?></span> hotových.
@@ -419,7 +419,7 @@ $done    = array_filter($tasky, fn($t) => $t["status"] === "done");
     </div>
     <div class="task-list">
         <?php if (empty($pending)): ?>
-            <div class="empty">🎉 Všetko hotové! Pridaj novú úlohu vyššie.</div>
+            <div class="empty"> Všetko hotové! Pridaj novú úlohu vyššie.</div>
         <?php else: ?>
             <?php foreach ($pending as $task): ?>
                 <div class="task-card">
